@@ -1,65 +1,76 @@
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class MergeSort {
 
-    //array a length must be an even number?
-    int[] mergeSort(int[] a) {
-        return null;
+    int[] mergeSort(int[] A, int p, int r) {//a 0,9
+        if (p >= r)
+            return null;
+        int q = (p + r) / 2;//4
+        mergeSort(A, p, q);//0,4
+        mergeSort(A, q + 1, r); //5,9
+        merge(A, p, q, r);//
+        return A;
     }
 
-
+    //array a length must be an even number?
     //two subarray already sorted or contain only one element
-    int[] merge(int[] a, int p, int q, int r) {
-//        int p = 0;
-//        int r = a.length - 1;
-//        int q = (p + r) / 2;
-
-        int[] L = new int[q + 1];
-        int[] R = new int[r - q];
+    void merge(int[] A, int p, int q, int r) { //0,4,9   //0,2,5
 
         //assign values to L[],R[]
-        for (int i = 0; i <= q; i++) {
-            L[i] = a[i];
-        }
+        int[] L = new int[q - p + 1];
+        int[] R = new int[r - q];
 
-        for (int j = q + 1; j <= r; j++) {
-            R[j] = a[j];
-        }
+//        for (int i = 0; i < q - p + 1; i++) {
+//            L[i] = A[p + i];
+//        }
+        System.arraycopy(A, p, L, 0, q - p + 1);
+//
+//        for (int j = 0; j < r - q; j++) {
+//            R[j] = A[q + j + 1];
+//        }
+        System.arraycopy(A, q + 1, R, 0, r - q);
 
-        //sort L[],R[] smaller value to a[]
+        System.out.println(Arrays.stream(A).mapToObj(String::valueOf).collect(Collectors.joining(",")));
+
+        //sort and merge smaller value of L[],R[] to a[]
         int i = 0;
         int j = 0;
         int k = p;
-        for (; i < L.length && j < R.length; ) {
+        while (i < L.length && j < R.length) {
             if (L[i] <= R[j]) {
-                a[k] = L[i];
+                A[k] = L[i];
                 i++;
-                k++;
             } else {
-                a[k] = R[j];
+                A[k] = R[j];
                 j++;
-                k++;
             }
+            k++;
         }
         while (i < L.length) {
-            a[k] = L[i];
+            A[k] = L[i];
             i++;
             k++;
         }
         while (j < R.length) {
-            a[k] = R[j];
+            A[k] = R[j];
             j++;
             k++;
         }
-
-        return a;
     }
 
-
     public static void main(String[] args) {
-        int x[] = {2, 4, 5, 8, 11};
-        int y[] = {1,2,8,56,67};
 
-//        new merge
-        System.out.println(x);
+        //test merge()
+//        int[] x = {2, 4, 5, 8, 11, 1, 2, 8, 56, 67};
+//        int[] y = new MergeSort().merge(x, 0, x.length / 2 - 1, x.length - 1);
+//        Arrays.stream(y).forEach(System.out::println);
+        //1,2,2,4,5,8,8,11,56,67
+
+        //test mergeSort()
+        int[] z = {5, 77, 1, 23, 1, 8, 4, 3, 2, 42};
+        int[] merged = new MergeSort().mergeSort(z, 0, z.length - 1);
+        System.out.println(Arrays.stream(merged).mapToObj(String::valueOf).collect(Collectors.joining(",")));
+
     }
 }
